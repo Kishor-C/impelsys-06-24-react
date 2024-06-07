@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <input type="number" id="i1" />
+    <button onclick="getData1()">Get Data One</button>
+    <button onclick="getData2()">Get Data Two</button>
+    <button onclick="getData3()">Get Data Three</button>
+    <div id="main"></div>
+    <script>
+      async function getData3() {
+        let input = document.getElementById("i1").value; // reading input#i1
+        let mainEle = document.getElementById("main"); // reading div#main
+        let URL = `https://jsonplaceholder.typicode.com/users/${input}`; // URL/1 or URL/2 and so on
+        let res = await fetch(URL); // waits until promise is fullfilled
+        let user = await res.json();
+        mainEle.innerHTML = `<h3>Hello ${user.username},your id ${user.id} and email ${user.email}</h3>`;
+      }
+      function getData2() {
+        let input = document.getElementById("i1").value; // reading input#i1
+        let mainEle = document.getElementById("main"); // reading div#main
+        let URL = `https://jsonplaceholder.typicode.com/users/${input}`; // URL/1 or URL/2 and so on
+        fetch(URL)
+          .then((v) => {
+            console.log("log inside then()");
+            return v.json();
+          })
+          .then(
+            (user) =>
+              (mainEle.innerHTML = `<h3>Hello ${user.username},your id ${user.id} and email ${user.email}</h3>`)
+          );
+        console.log("end of the function()");
+      }
+      function getData1() {
+        let input = document.getElementById("i1").value; // reading input#i1
+        let mainEle = document.getElementById("main"); // reading div#main
+        let http = new XMLHttpRequest(); // creating HTTP Req object
+        let URL = `https://jsonplaceholder.typicode.com/users/${input}`; // URL/1 or URL/2 and so on
+        http.open("GET", URL); // request init
+        http.send(); // send request
+        // handle the event using callbackFn i.e., function(){} or () => { }
+        http.onreadystatechange = () => {
+          if (http.readyState == 4) {
+            let jsonContent = http.responseText; // reading the response data
+            let user = JSON.parse(jsonContent); // converting JSON to JS, now you can access id, name, username,
+            mainEle.innerHTML = `<h3>Hello ${user.username},your id is ${user.id} and email is ${user.email}</h3>`;
+          }
+        };
+      }
+    </script>
+  </body>
+</html>

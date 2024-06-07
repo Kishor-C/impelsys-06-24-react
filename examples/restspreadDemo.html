@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // rest operator: You can maximum use only one rest parameter and
+      // it must be last parameter : You can't use as test(...a, b) { }
+      function total(a, ...b) {
+        let result = a;
+        b.forEach((v, i) => (result = result + v));
+        document.write(`<h2>Total ${result}</h2>`);
+      }
+      total(20, 30);
+      total(...[40, 30, 50, 70, 60]);
+    </script>
+  </body>
+</html>

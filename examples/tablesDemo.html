@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      let employees = [
+        {
+          id: 1,
+          name: "Vijay",
+          address: { state: "KA", city: "BLR", pin: 560001 },
+        },
+        {
+          id: 2,
+          name: "Ajay",
+        },
+        {
+          id: 3,
+          name: "Ravi",
+        },
+        {
+          id: 4,
+          name: "Siddharth",
+          address: { state: "TN", city: "CHN", pin: 660001 },
+        },
+      ];
+      document.write(`<table border = "1">
+        <thead>
+            <tr><th>ID</th><th>Name</th><th>State</th><th>City</th><th>Pin</th></tr>
+            </thead><tbody>`);
+      employees.forEach((value, index) => {
+        console.log(value);
+        document.write(`<tr>
+        <td>${value.id}</td><td>${value.name}</td><td>${value.address?.state}</td>
+        <td>${value.address?.city}</td><td>${value.address?.pin}</td>
+        </tr>`);
+      });
+      document.write(`</tbody></table>`);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      function test() {
+        const x = 20;
+        //x = 30; // error because x is 'const';
+        if (x > 10) {
+          var z1 = 65;
+          let z2 = 66;
+        }
+        console.log(`z1 = ${z1}`);
+        console.log(`z2 = ${z2}`); // you will get error because z2 is block scoped
+      }
+      test();
+
+      class Employee {
+        constructor(id, name, salary) {
+          this.id = id;
+          this.name = name;
+          this.salary = salary;
+        }
+        display() {
+          document.write(
+            `<h3>Id=${this.id},Name=${this.name},Salary=${this.salary}</h3>`
+          );
+        }
+        updateSalary(salary) {
+          if (this.salary == salary) {
+            alert("Trying to update the salary with the same value");
+          }
+          this.salary = salary;
+        }
+      } // end of the Employee class
+      var e1 = new Employee(123, "Rajesh", 45000);
+      e1.display();
+      //e1.salary = 60000;
+      e1.updateSalary(55000);
+      e1.display();
+    </script>
+  </body>
+</html>

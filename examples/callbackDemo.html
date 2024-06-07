@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      let items = [20, 30, 10, 50, 40];
+      //items.forEach(callbackFn(v, i){});
+      items.forEach((v, i) => document.write(`<p>Value=${v}, Index=${i}</p>`));
+      //items.map(callbackFn(v,i){}): map returns a new array by transforming the existing array
+      let anotherItems = items.map((v, i) => v - 3);
+      document.write(`<h2>After transforming</h2>`);
+      anotherItems.forEach((v, i) =>
+        document.write(`<p>Value=${v}, Index=${i}</p>`)
+      );
+      // transforming all the elements to HTML element
+      let htmlItems = items.map((v, i) => `<li>${v - 2}</li>`);
+      document.write("<ol>");
+      htmlItems.forEach((v, i) => document.write(v));
+      document.write("</ol>");
+    </script>
+  </body>
+</html>
