@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <!-- root node or root html element-->
+    <div id="root"></div>
+    <script
+      crossorigin
+      src="https://unpkg.com/react@18/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+    ></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+      // create another component
+      function Demo() {
+        return (
+          <div>
+            <h3>This is a demo component</h3>
+          </div>
+        );
+      }
+      // creating a component - function Hello()  - hello() is incorrect
+      // use <Hello /> calls Hello(), you can't use <hello /> as its incorrect
+      function Hello() {
+        return (
+          <div>
+            <h2>Hello React</h2>
+            <Demo />
+            <Demo />
+            <Demo />
+          </div>
+        );
+      }
+      // how to add <Hello /> in the div#root
+      let root = ReactDOM.createRoot(document.getElementById("root"));
+      // rendering entire application to the div#root
+      root.render(<Hello />);
+    </script>
+  </body>
+</html>

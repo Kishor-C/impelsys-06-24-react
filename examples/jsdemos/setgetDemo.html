@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Demo on setters & getters</h1>
+    <script>
+      class Employee {
+        // pass another property gender to the constructor,
+        // when you read gender it has to return
+        // Mr. name or Ms. name based on the gender
+        // or create display that returns Mr. or Ms.
+        // with other data
+        constructor(id, name, salary, gender) {
+          this.id = id;
+          this.name = name;
+          this.salary = salary;
+          this.gender = gender;
+        }
+        set empId(id) {
+          //   this.id = id;
+          alert("You cant modify the id");
+        }
+        get empId() {
+          return this.id;
+        }
+        set empSalary(salary) {
+          if (salary == this.salary) {
+            alert("trying to update salary with same value");
+          } else {
+            this.salary = salary;
+          }
+        }
+        get empSalary() {
+          return this.salary;
+        }
+        get empName() {
+          return this.name.toUpperCase();
+        }
+        set empName(name) {
+          // you can alert if name is same
+          this.name = name;
+        }
+        display() {
+          if (this.gender == "Male") {
+            console.log(`Hello Mr. ${this.name}`);
+          } else {
+            console.log(`Hello Ms. ${this.name}`);
+          }
+          console.log(`Your id: ${this.id}, salary = ${this.salary}`);
+        }
+      }
+      let e = new Employee(2, "Raj", 45000, "Male");
+      e.display();
+      let e2 = new Employee(3, "Sony", 45000, "Female");
+      e2.display();
+      e.empSalary = 50000; //setter
+      console.log(e.empSalary); //getter
+      //e.empSalary = 50000; //setter
+      e.empId = 999; //alerts with error msg
+      console.log(e.empId);
+    </script>
+  </body>
+</html>

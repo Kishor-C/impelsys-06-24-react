@@ -8,6 +8,14 @@
   </head>
   <body>
     <script>
+      function test(x, y, z) {
+        console.log(x);
+        console.log(y);
+        console.log(z);
+      }
+      let items = [7, 8, 10];
+      test(items[0], items[1], items[2]);
+      test(...items); // x=7, y=8, z=10
       // rest operator: You can maximum use only one rest parameter and
       // it must be last parameter : You can't use as test(...a, b) { }
       function total(a, ...b) {
