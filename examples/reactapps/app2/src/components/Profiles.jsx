@@ -10,6 +10,12 @@
 */
 import { useState } from "react";
 import { Link, Routes, Route, useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+import * as bootstrap from "bootstrap";
+
+// backend url
+const BASE_URL = "http://localhost:8080";
+
 // ContactApp is the only component that is added to the root component
 // this component will have entire page structure
 export function ContactApp() {
@@ -139,16 +145,17 @@ export function ProfileLogin() {
         <input
           type="submit"
           value="Sign in"
-          className="btn btn-primary btn-lg"
+          className="btn btn-primary btn-lg w-100"
         />
         <br />
         <br />
-        <div>
-          <Link to="/signup" className="btn btn-info btn-lg w-100">
-            Sign Up
-          </Link>
-        </div>
       </form>
+      <hr />
+      <div className="h-100 d-flex align-items-center justify-content-center">
+        <Link to="/signup" className="btn btn-dark btn-lg">
+          Create new account
+        </Link>
+      </div>
     </div>
   );
 }
@@ -166,86 +173,112 @@ export function ProfileRegistration() {
     "data:image/png;base64,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",
   ];
   // event handler for form submit - <form onSubmit={handleSubmit}>
+  let nav = useNavigate(); // hook from react router dom to navigate
+  // hooks must be accessed outside the callback
   let handleSubmit = (e) => {
     e.preventDefault();
     // data must be submitted to the server and next component must be loaded
-    alert("form submission is pending");
+    //alert("form submission is pending");
+    let url = `${BASE_URL}/profile`;
+    let data = {
+      _id: parseInt(id),
+      name: name,
+      password: password,
+      phone: phone,
+      email: email,
+      dob: dob,
+    };
+    axios
+      .post(url, data)
+      .then((response) => {
+        alert(
+          "Registered successfully with an id: " + response.data.insertedId
+        );
+        nav("/signin");
+      })
+      .catch((err) => {
+        alert("User already exists, error code: " + err.message);
+        nav("/signup");
+      });
   };
   return (
     <div className="w-25">
       <h3 className="text-primary">Profile Registration</h3>
 
       <hr />
-      <form onSubmit={handleSubmit}>
-        <div>
-          <input
-            type="number"
-            placeholder="Enter Id"
-            className="form-control form-control-lg"
-            onChange={(e) => setId(e.target.value)}
-          ></input>
-        </div>
-        <br />
-        <div>
-          <input
-            type="text"
-            placeholder="Enter Name"
-            className="form-control form-control-lg"
-            onChange={(e) => setName(e.target.value)}
-          />
-        </div>
-        <br />
-        <div>
-          <input
-            type="password"
-            placeholder="Enter Password"
-            className="form-control form-control-lg"
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <br />
-        <div>
-          <input
-            type="email"
-            placeholder="Enter Email"
-            className="form-control form-control-lg"
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-        <br />
-        <div>
-          <input
-            type="number"
-            placeholder="Enter Phone no"
-            className="form-control form-control-lg"
-            onChange={(e) => setPhone(e.target.value)}
-          />
-        </div>
-        <br />
-        <div>
-          <h5>Select Birthday</h5>
-          <input
-            type="date"
-            className="form-control form-control-lg"
-            onChange={(e) => setDob(e.target.value)}
-          />
-        </div>
-        <br />
-        <div>
-          <input
-            type="submit"
-            className="btn btn-primary btn-lg"
-            value="Sign Up"
-          ></input>
-        </div>
-      </form>
       <div>
-        <label>Already have an account click on Sign in</label>
-        <div>
-          <Link to="/signin" className="btn btn-info btn-lg w-100">
-            Sign in
-          </Link>
-        </div>
+        <form onSubmit={handleSubmit}>
+          <div>
+            <input
+              type="number"
+              placeholder="Enter Id"
+              className="form-control form-control-lg"
+              onChange={(e) => setId(e.target.value)}
+            ></input>
+          </div>
+          <br />
+          <div>
+            <input
+              type="text"
+              placeholder="Enter Name"
+              className="form-control form-control-lg"
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
+          <br />
+          <div>
+            <input
+              type="password"
+              placeholder="Enter Password"
+              className="form-control form-control-lg"
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+          <br />
+          <div>
+            <input
+              type="email"
+              placeholder="Enter Email"
+              className="form-control form-control-lg"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+          <br />
+          <div>
+            <input
+              type="number"
+              placeholder="Enter Phone no"
+              className="form-control form-control-lg"
+              onChange={(e) => setPhone(e.target.value)}
+            />
+          </div>
+          <br />
+          <div>
+            <h5>Select Birthday</h5>
+            <input
+              type="date"
+              className="form-control form-control-lg"
+              onChange={(e) => setDob(e.target.value)}
+            />
+          </div>
+          <br />
+          <div>
+            <input
+              type="submit"
+              className="btn btn-primary btn-lg  w-100"
+              value="Sign Up"
+            ></input>
+          </div>
+        </form>
+      </div>
+      <hr />
+      <div>
+        <label>
+          <span className="text-primary">Already have an account?</span> click
+          on
+        </label>
+        &nbsp;
+        <Link to="/signin">Sign in</Link>
       </div>
       <div>
         {icons.map((value, index) => (
