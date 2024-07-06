@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import { authenticate, store } from "./nosql-crud-util.js";
-import { Buffer } from "buffer";
+import { findById } from "./find-in-nosql.js";
 // other imports like store(), findAll(), findById(), authenticate() comes here
 
 // express object to call http methods like get, post, put, delete
@@ -9,6 +9,13 @@ let app = express();
 // adding cors to the express & also parser for json
 app.use(cors());
 app.use(express.json()); // parser for json to convert to js when request body carries json
+
+// get the profile based on the _id
+app.get("/profile/find/:id", async (req, res) => {
+  let id = parseInt(req.params.id);
+  let result = await findById(id);
+  res.status(200).json(result);
+});
 
 // login based on email and password
 app.get("/profile/login", async (req, res) => {
@@ -20,9 +27,11 @@ app.get("/profile/login", async (req, res) => {
   let pwd = decodedSplitData[1];
   try {
     let result = await authenticate(mail, pwd);
+    console.log(result);
     if (result != null) res.status(200).json(result);
     else res.status(404).json({ message: "Email or Password is incorrect" });
   } catch (err) {
+    console.log(err);
     res.status(404).json({ message: "Something went wrong" });
   }
 });

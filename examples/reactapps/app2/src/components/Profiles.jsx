@@ -8,7 +8,7 @@
  6. ViewContact & DeleteContact
  and etc
 */
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, Routes, Route, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import * as bootstrap from "bootstrap";
@@ -25,35 +25,73 @@ export function ContactApp() {
         <Route path="" element={<ProfileLogin />}></Route>
         <Route path="/signup" element={<ProfileRegistration />}></Route>
         <Route path="/signin" element={<ProfileLogin />}></Route>
-        <Route path="/dashboard/:id/*" element={<ProfileSuccess />}></Route>
+        <Route path="/success/:id/*" element={<ProfileSuccess />}></Route>
       </Routes>
     </>
+  );
+}
+
+/*
+  Dashboard that shows the total contacts using the props
+
+*/
+export function Dashboard(props) {
+  let contacts = props.contacts;
+  return contacts != undefined ? (
+    <div>
+      <h4 className="text-primary">Total contacts: {contacts.length}</h4>
+    </div>
+  ) : (
+    <div>
+      <h4 className="text-danger">Sorry you have no Contacts </h4>
+    </div>
   );
 }
 // Dasboard component that will have sub routes and reads path parameters
 export function ProfileSuccess() {
   let { id } = useParams();
+  let [profile, setProfile] = useState(undefined);
   let fakeProfile = {
-    name: "Fake User",
-    dob: "2001-12-22",
-    email: "fake@g",
-    phone: 9980023,
     imageURL:
       "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALoAAACUCAMAAAATdsOFAAAAMFBMVEXk5ueutLepr7LS1tjn6eq5vsHFycvh4+Te4OLQ09W8wcPr7e7a3d7BxsizubvN0NKXgi4zAAAEVElEQVR4nO2cXZejIAxAFYMon///3y7admunUwskmsw53pfdM093MhECBLru4uLi4uLiQh4Axkx+mNOYSYOfTP4Rt1QJ0Pl51L160utx9uLtwU3Jxmz7ilLRJiPa3ZnQfyYYxy34Gfsz3D+CHzqRkQeT3hLlzb2XmDbg9TfxVd56ae4uxQLxlSQr450tFc+BH0XFXZebZ3ctJ+GnojTfuFsp7qbSfHHndr4B1eaLu4Sw13yhG0b+cQbG+pivJO64g28Tz3hmdVM1LG5Rmte8OV0Wd95pdWo3z+6c5i5i1HvN96WCR5n3/cDmDsXV4gfYJlUYkOZ8YYe2eXSDGpnMPTZf+j5OPOoJbd6rgUX92/q/CJ4Ptb162aBYvtOBIOhMGYMoXzbqgSHs6PnoDkcNRhF0nmRHFY0bdYYVx0ykPp8edhhJzDnW140bAe/Y89WJBhgOdSJzhqUSmXq81C/1GhhynWqE0de4Xg4EmkKAY7c6EdUwDJvV2J2vhzrHXjWROoM5kJjzrJL2mjDKYTkPI1lrqJnBnGgfxnCoG4pJien8lGBkV4nFHHHu+IRnp7fr8PvrgcmcYJf6/J2Mh/ufPUvqADu0swUdvVQ6f233BFB77Iq1+Q6z4FDnr49emBBfKqv48qU2mzMd3m1oTRmm094X2syZG3nuNKlzS9+YGsxZyvRfGGqHmSinnbqu/FWCzPOKqa8YZ5jaMT7hinsdZPTEboGy3nsVhXXeL4AvCLwKktL8P5BHmi83ZLSXeUVmkZ93PlcV+auWHcD5T02+1juhEX8AzqSg43IH7xbr/G/UIU3SxVcAjJ/TGOxCGNPsJ+l3BzdAdjVTxpj1/3+HbOuegPhcWYNrjB9yruic7euV05ztUeesmYf8B5B4ZRaW9M7O4XFF9sewePtZtPk38JMgf3DLvV67WH+dTJVaRpvBSLDP3kOIsaZwzOGPln2wzHO/rrF++QXGiW2vtDOD/Z4jO/K5ivQMqQNmGHEXNW6ht/PJ8mCSbUyUt9Dr8cQ62MFI1VFyw07nLD+g+379uxZlT1iugtkryRHy4eBVyDIYHiHeHz5YOk/VevSrfDzufMYR3CvZR3eHfK9QtU3UyDE9SURN39/cyV93gN0nSEjdI+3lNoc5MqqGsgfPEbWoFUK4KwlEfYHlkL1Mcbp5rzTJ9ER2KaPKPRLE3VE1wNa6o0sazG17HNi4U9wpbURp1Ckfwe1phDuqu+rUmejdHVHQkN0MaHVvrgnKT+UOozHdcS1GNLSVBMCb6HfaFk4cs+gbLSfbJG2veJqafvm/0RVVHXb0+ylUqOorV9xD+hNVWf+KCXpffV3MNT8sdQB12S5jeLlT9cADy8roI1XVb/tDZIdQUYVRvLdDSM2zm4xro1+pOTjgWUp/pnwfcpKV6hVLDiGV15PyGkzSVHojFA+P52ylVxBLzWleOSKl1NxYJY3ihPGDMObyUgCkUWx+cXEhiX/21UCtIhkRiAAAAABJRU5ErkJggg==",
   };
+  useEffect(() => {
+    axios
+      .get(`${BASE_URL}/profile/find/${id}`)
+      .then((response) => setProfile(response.data));
+  }, []);
   return (
     <div className="container">
       <div className="row">
         <div className="col-4">
           <img src={fakeProfile.imageURL} width="100" height="100" />
-          <p>Name:{fakeProfile.name}</p>
-          <p>Birthday:{fakeProfile.dob}</p>
-          <p>Phone: {fakeProfile.phone}</p>
-          <p>Id: {id}</p>
-          <p>Email: {fakeProfile.email}</p>
+          <h6>Name: {profile?.name}</h6>
+          <h6>Birthday: {profile?.dob}</h6>
+          <h6>Email: {profile?.email}</h6>
         </div>
         <div className="col-8">
-          <h3>Sub Routes</h3>
+          <Link to="dashboard">Dashboard</Link> ||&nbsp;
+          <Link to="addContacts">Add Contacts</Link> ||&nbsp;
+          <Link to="viewContacts">View Contacts</Link> ||&nbsp;
+          <Link>Settings</Link> ||&nbsp;
+          <Link to="/signin">Signout</Link>
+          <div>
+            <Routes>
+              <Route
+                path=""
+                element={<Dashboard contacts={profile?.contacts} />}
+              ></Route>
+              <Route
+                path="dashboard"
+                element={<Dashboard contacts={profile?.contacts} />}
+              />
+              <Route path="addContacts" element={<div>Add Contacts</div>} />
+              <Route
+                path="viewContacts"
+                element={<ViewContacts contacts={profile?.contacts} />}
+              />
+            </Routes>
+          </div>
         </div>
       </div>
     </div>
@@ -61,18 +99,12 @@ export function ProfileSuccess() {
 }
 
 // View Contacts Component
-export function ViewContacts() {
-  // fake list - later we are going to change this code a bit when we access DB
-  let fakeContacts = [
-    { id: 1, name: "Virat", phone: 9988998899 },
-    { id: 2, name: "Rohit", phone: 8877998899 },
-    { id: 3, name: "Sachin", phone: 7788998899 },
-    { id: 4, name: "Dhoni", phone: 6666998899 },
-    { id: 5, name: "Yuvraj", phone: 66558998899 },
-  ];
+export function ViewContacts(props) {
+  let contacts = props.contacts;
+  console.log(contacts);
   // display the list in a table that will have name, phone, delete button-danger
   return (
-    <div className="w-50">
+    <div className="w-100">
       <h2 className="text-primary">List of Contacts</h2>
       <hr />
       <input
@@ -90,13 +122,13 @@ export function ViewContacts() {
           </tr>
         </thead>
         <tbody>
-          {fakeContacts.map((value, index) => (
+          {contacts?.map((value, index) => (
             <tr key={index}>
               <td>{index + 1}</td>
               <td>{value.name}</td>
               <td>{value.phone}</td>
               <td>
-                <button className="btn btn-danger">Delete {value.id}</button>
+                <button className="btn btn-danger">Delete</button>
               </td>
             </tr>
           ))}
@@ -110,11 +142,26 @@ export function ProfileLogin() {
   // create a form that renders email and password to login
   let [email, setEmail] = useState("");
   let [password, setPassword] = useState("");
+
   let nav = useNavigate();
   let handleLogin = (e) => {
     e.preventDefault();
-    let randomId = parseInt(Math.random() * 123445);
-    nav(`/dashboard/${randomId}`); // matches to the /dasboard/:id/*
+    // let randomId = parseInt(Math.random() * 123445);
+    // nav(`/dashboard/${randomId}`); // matches to the /dasboard/:id/*
+    let encode = btoa(email + ":" + password);
+    axios
+      .get(`${BASE_URL}/profile/login`, {
+        headers: { Authorization: "Basic " + encode },
+      })
+      .then((response) => {
+        console.log(response);
+        nav("/success/" + response.data._id);
+      })
+      .catch((err) => {
+        console.log(err);
+        //alert(err.response.data.message);
+        nav("/signin");
+      });
   };
   return (
     <div className="w-25">
